@@ -136,6 +136,10 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         )
 
     async def dispatch(self, request: Request, call_next: Callable) -> Response:
+        # Always allow CORS preflight requests
+        if request.method == "OPTIONS":
+            return await call_next(request)
+
         # Skip rate limiting for health checks and docs
         skip_paths = {"/health", "/docs", "/openapi.json", "/redoc"}
         if request.url.path in skip_paths:
@@ -168,6 +172,10 @@ class RequestSizeLimitMiddleware(BaseHTTPMiddleware):
     """
 
     async def dispatch(self, request: Request, call_next: Callable) -> Response:
+        # Always allow CORS preflight requests
+        if request.method == "OPTIONS":
+            return await call_next(request)
+
         settings = get_settings()
         max_bytes = settings.MAX_REQUEST_SIZE_MB * 1024 * 1024
 
