@@ -26,7 +26,7 @@ class Settings(BaseSettings):
 
     # Security
     SECRET_KEY: str = Field(default_factory=lambda: secrets.token_urlsafe(64))
-    ALLOWED_ORIGINS: str = Field(default="http://localhost:3000")
+    ALLOWED_ORIGINS=https://shortlist-seven.vercel.app,http://localhost:3000
     RATE_LIMIT_PER_MINUTE: int = 60
     RATE_LIMIT_BURST: int = 10
     MAX_REQUEST_SIZE_MB: int = 10
