@@ -47,9 +47,9 @@ export async function middleware(request: NextRequest) {
 
   // Redirect unauthenticated users away from protected routes
   if (isProtectedRoute && !user) {
-    const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set("redirectTo", pathname);
-    return NextResponse.redirect(loginUrl);
+    const homeUrl = new URL("/", request.url);
+    homeUrl.searchParams.set("redirectTo", pathname);
+    return NextResponse.redirect(homeUrl);
   }
 
   // Redirect authenticated users away from auth pages
