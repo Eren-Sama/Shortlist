@@ -16,7 +16,7 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Shortlist — AI Portfolio Architect",
+  title: "Shortlist",
   description:
     "AI-Powered Recruiter-Aware Portfolio Architect. Analyze JDs, generate tailored capstone projects, and optimize your engineering portfolio.",
 };
