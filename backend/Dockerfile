@@ -58,4 +58,4 @@ EXPOSE 8000
 # - workers: 4 (adjust based on CPU cores)
 # - timeout: 120s (repo analysis can take time)
 # - limit-concurrency: prevent resource exhaustion
-CMD sh -c "uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 4 --timeout-keep-alive 120 --limit-concurrency 100 --no-access-log"
+CMD sh -c "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
