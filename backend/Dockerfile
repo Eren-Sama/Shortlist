@@ -60,7 +60,7 @@ EXPOSE 8000
 # - limit-concurrency: prevent resource exhaustion
 CMD ["uvicorn", "app.main:app", \
      "--host", "0.0.0.0", \
-     "--port", "8000", \
+     "--port", $PORT, \
      "--workers", "4", \
      "--timeout-keep-alive", "120", \
      "--limit-concurrency", "100", \
