@@ -48,14 +48,7 @@ RUN mkdir -p /tmp/shortlist_repos && \
 # Switch to non-root user
 USER shortlist
 
-# Health check
-# HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-#     CMD python -c "import httpx; httpx.get('http://localhost:8000/health').raise_for_status()" || exit 1
-
 EXPOSE 8000
 
-# Run with production settings
-# - workers: 4 (adjust based on CPU cores)
-# - timeout: 120s (repo analysis can take time)
-# - limit-concurrency: prevent resource exhaustion
-CMD sh -c "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+# Fixed: Use proper shell form for PORT variable expansion
+CMD uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}
