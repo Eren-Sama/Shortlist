@@ -48,7 +48,8 @@ RUN mkdir -p /tmp/shortlist_repos && \
 # Switch to non-root user
 USER shortlist
 
-EXPOSE 8000
+# Railway uses port 8080 by default
+EXPOSE 8080
 
-# Fixed: Use proper shell form for PORT variable expansion
-CMD uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}
+# Use Railway's $PORT environment variable (automatically set to 8080)
+CMD ["sh", "-c", "exec uvicorn app.main:app --host 0.0.0.0 --port $PORT"]
