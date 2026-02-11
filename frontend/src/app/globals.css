@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-// Shortlist Design System — Aesthetic: Obsidian Forge — Accent: Acid Chartreuse #c8ff00 — Font: Bricolage Grotesque + JetBrains Mono
+/* Shortlist Design System — Aesthetic: Obsidian Forge — Accent: Acid Chartreuse #c8ff00 — Font: Bricolage Grotesque + JetBrains Mono */
 
 @theme {
   --color-root: #08080a;
