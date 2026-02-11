@@ -1,0 +1,45 @@
+# ──────────────────────────────────────────────
+# Shortlist — Python Backend Dependencies
+# ──────────────────────────────────────────────
+# Pin major.minor for reproducibility.
+# Run: pip install -r requirements.txt
+
+# ── Core Framework ──
+fastapi>=0.115.0,<1.0.0
+uvicorn[standard]>=0.32.0,<1.0.0
+pydantic>=2.10.0,<3.0.0
+pydantic-settings>=2.7.0,<3.0.0
+
+# ── LLM / Agent Orchestration ──
+langgraph>=1.0.0,<2.0.0
+langchain-core>=0.3.0,<1.0.0
+langchain-groq>=0.2.0,<1.0.0
+
+# ── Database ──
+supabase>=2.0.0,<3.0.0
+
+# ── Auth ──
+PyJWT>=2.9.0,<3.0.0
+
+# ── HTTP Client ──
+httpx>=0.28.0,<1.0.0
+
+# ── Git Operations (Phase 2) ──
+gitpython>=3.1.0,<4.0.0
+
+# ── Code Analysis (Phase 2) ──
+flake8>=7.0.0,<8.0.0
+pylint>=3.0.0,<4.0.0
+radon>=6.0.0,<7.0.0
+
+# ── Environment ──
+python-dotenv>=1.0.0,<2.0.0
+
+# ── Testing ──
+pytest>=8.0.0,<9.0.0
+pytest-asyncio>=0.24.0,<1.0.0
+pytest-cov>=6.0.0,<7.0.0
+httpx  # Already listed above, used by TestClient
+
+# ── Security ──
+python-multipart>=0.0.9  # Required for form data handling in FastAPI
