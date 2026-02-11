@@ -19,14 +19,28 @@ def configure_cors(app: FastAPI) -> None:
     Never use allow_origins=["*"] in production.
     """
     settings = get_settings()
+    
+    # Get origins from settings
+    origins = settings.allowed_origins_list.copy()
+    
+    # Always ensure Vercel URL is included
+    vercel_url = "https://shortlist-seven.vercel.app"
+    if vercel_url not in origins:
+        origins.append(vercel_url)
+    
+    # Log configured origins for debugging
+    import logging
+    logger = logging.getLogger("uvicorn")
+    logger.info(f"CORS configured with origins: {origins}")
+    
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=settings.allowed_origins_list,
+        allow_origins=origins,
         allow_credentials=True,
-        allow_methods=["*"],
+        allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
         allow_headers=["*"],
         expose_headers=["X-Request-ID", "X-RateLimit-Remaining"],
-        max_age=600,  # Cache preflight for 10 minutes
+        max_age=600,
     )
 
 # Security Headers — OWASP Recommendations
