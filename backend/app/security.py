@@ -23,13 +23,8 @@ def configure_cors(app: FastAPI) -> None:
         CORSMiddleware,
         allow_origins=settings.allowed_origins_list,
         allow_credentials=True,
-        allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        allow_headers=[
-            "Authorization",
-            "Content-Type",
-            "X-Request-ID",
-            "X-Idempotency-Key",
-        ],
+        allow_methods=["*"],
+        allow_headers=["*"],
         expose_headers=["X-Request-ID", "X-RateLimit-Remaining"],
         max_age=600,  # Cache preflight for 10 minutes
     )
