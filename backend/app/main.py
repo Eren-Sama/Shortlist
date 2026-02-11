@@ -169,6 +169,10 @@ def create_app() -> FastAPI:
         )
 
     # ── Routes ──
+    @app.get("/")
+    async def root():
+        return {"status": "ok"}
+
     @app.get("/health", tags=["system"])
     async def health_check():
         """Lightweight health check for load balancers."""
