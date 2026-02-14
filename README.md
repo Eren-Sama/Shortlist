@@ -1,51 +1,81 @@
 <div align="center">
 
-# Shortlist
+# ⚡ Shortlist  
+### Engineer Your Career Signal
 
-### Engineer Career Signal with Precision
-
-An AI-powered multi-agent system that reverse-engineers job descriptions  
-and constructs recruiter-aligned projects, repositories, and portfolio assets.
+An AI-powered multi-agent system that reverse-engineers job descriptions and generates recruiter-aligned projects, repositories, and portfolio assets.
 
 <br/>
 
-<p>
-  <img src="https://img.shields.io/badge/Next.js-000?style=flat-square&logo=nextdotjs&logoColor=white"/>
-  <img src="https://img.shields.io/badge/React-000?style=flat-square&logo=react&logoColor=61DAFB"/>
-  <img src="https://img.shields.io/badge/TypeScript-000?style=flat-square&logo=typescript&logoColor=3178C6"/>
-  <img src="https://img.shields.io/badge/FastAPI-000?style=flat-square&logo=fastapi&logoColor=009688"/>
-  <img src="https://img.shields.io/badge/Python-000?style=flat-square&logo=python&logoColor=3776AB"/>
-  <img src="https://img.shields.io/badge/PostgreSQL-000?style=flat-square&logo=postgresql&logoColor=336791"/>
-  <img src="https://img.shields.io/badge/Docker-000?style=flat-square&logo=docker&logoColor=2496ED"/>
-  <img src="https://img.shields.io/badge/LangGraph-MultiAgent-000?style=flat-square"/>
-</p>
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![LangGraph](https://img.shields.io/badge/LangGraph-Multi--Agent-blueviolet?style=for-the-badge)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
 </div>
 
 ---
 
-## Philosophy
+## 🧠 Overview
 
-Recruiters don’t reward randomness.  
+Recruiters don’t reward randomness.
 They reward alignment.
 
-Shortlist converts a job description into a structured skill graph,  
+Shortlist converts a job description into a structured skill graph,
 then engineers everything around that graph.
 
-Projects.  
-Repositories.  
-Resume bullets.  
+Projects.
+Repositories.
+Resume bullets.
 Portfolio positioning.
 
 All calibrated to the signal the role demands.
 
 ---
 
-# System Design
+# 🧩 Intelligence System
 
-Shortlist is built as a modular, graph-orchestrated intelligence system.
+Shortlist operates as a coordinated graph of specialized agents:
 
-Each capability is an independent node wired dynamically at runtime.
+### 🔍 JD Analysis  
+Extracts required skills, seniority expectations, domain context, and implicit behavioral signals.
+
+### 🏢 Company Logic Engine  
+Applies contextual modifiers based on company archetype:
+- Startup → velocity, ownership
+- Enterprise → scale, reliability
+- Consultancy → clarity, adaptability
+
+### 🏗 Capstone Generator  
+Produces strategically aligned project ideas with recruiter-match scoring.
+
+### 📊 Repository Analyzer  
+Evaluates GitHub repositories for:
+- Structural quality  
+- Documentation clarity  
+- Signal strength  
+- Alignment vs target role  
+
+### 🧱 Scaffold Generator  
+Generates structured production-grade repository blueprints.
+
+### 📈 Portfolio Optimizer  
+Creates:
+- Optimized README copy  
+- Resume bullets  
+- Demo pitch script  
+- Social launch copy  
+
+### 📄 Resume Fitness Scorer  
+Analyzes resume alignment against JD graph and surfaces improvement gaps.
+
+---
+
+# 🏗 Architecture
 
 ```
                          ┌────────────────────┐
@@ -53,55 +83,38 @@ Each capability is an independent node wired dynamically at runtime.
                          │   TLS Termination  │
                          └─────────┬──────────┘
                                    │
-                ┌──────────────────┼──────────────────┐
-                │                  │                  │
-          ┌─────▼─────┐      ┌─────▼─────┐      ┌────▼────┐
-          │ Frontend  │      │  Backend  │      │ External │
-          │ Next.js   │      │  FastAPI  │      │ Services │
-          │ AppRouter │      │ LangGraph │      │          │
-          └───────────┘      └─────┬─────┘      └────┬────┘
-                                    │                │
-                               ┌────▼────┐      ┌────▼────┐
-                               │ Postgres │      │   LLM   │
-                               │  + Auth  │      │ Provider│
-                               └──────────┘      └─────────┘
+            ┌──────────────────────┼──────────────────────┐
+            │                      │                      │
+      ┌─────▼─────┐          ┌─────▼─────┐         ┌─────▼─────┐
+      │  Frontend │          │  Backend  │         │ External  │
+      │  Next.js  │          │  FastAPI  │         │ Services  │
+      │  AppRouter│          │ LangGraph │         │           │
+      └───────────┘          └─────┬─────┘         └─────┬─────┘
+                                    │                     │
+                              ┌─────▼─────┐         ┌─────▼─────┐
+                              │ PostgreSQL│         │    LLM    │
+                              │  + Auth   │         │  Provider │
+                              └───────────┘         └───────────┘
 ```
 
 ---
 
-# Intelligence Graph
+# ⚙️ Tech Stack
 
-Shortlist operates through specialized agents:
-
-- **JD Analyzer** — extracts explicit + implicit hiring signals  
-- **Company Logic Layer** — applies contextual behavioral weighting  
-- **Capstone Engine** — generates strategically aligned project blueprints  
-- **Repository Analyzer** — evaluates signal clarity & recruiter readability  
-- **Scaffold Generator** — produces production-grade structural foundations  
-- **Portfolio Optimizer** — crafts narrative positioning & demo scripts  
-- **Resume Fitness Engine** — measures alignment delta vs target role  
-
-Each node operates independently.  
-The orchestrator composes them based on user intent.
-
----
-
-# Technical Foundation
-
-| Layer | Stack |
-|--------|--------|
-| Frontend | Next.js (App Router), React, TypeScript |
+| Layer | Technology |
+|--------|------------|
+| Frontend | Next.js (App Router), React, TypeScript, Tailwind |
 | Backend | FastAPI, Python 3.12, Pydantic v2 |
-| AI Orchestration | LangGraph (graph-based agent routing) |
+| AI Orchestration | LangGraph |
 | LLM | Groq (Llama 3.x series) |
-| Data Layer | PostgreSQL with Row-Level Security |
-| Infra | Multi-stage Docker builds |
+| Database | PostgreSQL with Row-Level Security |
+| Infrastructure | Docker multi-stage builds |
 | CI/CD | GitHub Actions |
-| Testing | Extensive automated test coverage |
+| Testing | Comprehensive automated test suite |
 
 ---
 
-# Structural Layout
+# 📂 Structural Design
 
 ```
 Shortlist/
@@ -129,40 +142,37 @@ Shortlist/
 
 ---
 
-# Engineering Characteristics
+# 🔥 Engineering Highlights
 
 - Graph-based multi-agent orchestration  
-- Strict schema validation and typed boundaries  
-- Provider-agnostic LLM abstraction  
+- Provider-agnostic LLM abstraction layer  
+- Strict schema validation  
 - Database-level security enforcement  
 - Structured logging architecture  
-- Containerized production pipeline  
-- Clear separation of system concerns  
+- Production-grade containerization  
+- Clean separation of concerns  
 
 ---
 
-# Design Intent
+# 🎯 Design Philosophy
 
-Shortlist is not a template generator.
-
-It is signal infrastructure.
-
-It formalizes:
-- How hiring signals are interpreted  
-- How project narratives are engineered  
-- How alignment gaps are quantified  
+- Signal-first engineering  
+- Modular intelligence layers  
+- Production-ready architecture  
+- Recruiter-readable system design  
+- Scalable orchestration patterns  
 
 ---
 
-# Repository Note
+# 🔎 Repository Note
 
-This repository is shared for architectural demonstration and portfolio review.
+This repository is shared publicly for architectural demonstration and portfolio review purposes.
 
-Operational configuration and deployment layers are intentionally not included.
+Operational configuration details and deployment layers are intentionally not included.
 
 ---
 
-# License
+# 📜 License
 
 MIT
 
@@ -170,7 +180,6 @@ MIT
 
 <div align="center">
 
-Built with intent.  
-Engineered for leverage.
+Built as strategic career infrastructure.
 
 </div>
