@@ -19,24 +19,24 @@ Paste a job description and Shortlist runs it through a pipeline of specialized 
 ## Architecture
 
 ```
-                    ┌──────────────────┐
-                    │  Nginx / Caddy   │
-                    │  (TLS + Proxy)   │
-                    └────┬────────┬────┘
-                         │        │
-              ┌──────────▼──┐  ┌──▼───────────┐
-              │   Backend   │  │   Frontend   │
-              │  (Gunicorn  │  │  (Next.js    │
-              │   +Uvicorn) │  │  Standalone) │
-              │  Port 8000  │  │  Port 3000   │
-              └──────┬──────┘  └──────────────┘
-                     │
-          ┌──────────┼──────────┐
-          │          │          │
-    ┌─────▼─────┐ ┌──▼───┐ ┌───▼────┐
-    │ Supabase  │ │ Groq │ │ GitHub │
-    │ (DB+Auth) │ │ (LLM)│ │  API   │
-    └───────────┘ └──────┘ └────────┘
+                                              ┌──────────────────┐
+                                              │  Nginx / Caddy   │
+                                              │  (TLS + Proxy)   │
+                                              └────┬────────┬────┘
+                                                   │        │
+                                        ┌──────────▼──┐  ┌──▼───────────┐
+                                        │   Backend   │  │   Frontend   │
+                                        │  (Gunicorn  │  │  (Next.js    │
+                                        │   +Uvicorn) │  │  Standalone) │
+                                        │  Port 8000  │  │  Port 3000   │
+                                        └──────┬──────┘  └──────────────┘
+                                               │
+                                    ┌──────────┼──────────┐
+                                    │          │          │
+                              ┌─────▼─────┐ ┌──▼───┐ ┌───▼────┐
+                              │ Supabase  │ │ Groq │ │ GitHub │
+                              │ (DB+Auth) │ │ (LLM)│ │  API   │
+                              └───────────┘ └──────┘ └────────┘
 ```
 
 The backend is a FastAPI service running a LangGraph agent orchestrator. Each "intelligence layer" is an independent graph node — the orchestrator wires them together based on what the user requests. The frontend is a Next.js App Router dashboard with Supabase auth (Google OAuth + magic link).
