@@ -27,7 +27,7 @@ Paste a job description and Shortlist runs it through a pipeline of specialized 
               ┌──────────▼──┐  ┌──▼───────────┐
               │   Backend   │  │   Frontend   │
               │  (Gunicorn  │  │  (Next.js    │
-              │   +Uvicorn) │  │   Standalone)│
+              │   +Uvicorn) │  │  Standalone) │
               │  Port 8000  │  │  Port 3000   │
               └──────┬──────┘  └──────────────┘
                      │
