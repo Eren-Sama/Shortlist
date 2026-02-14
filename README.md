@@ -24,7 +24,7 @@ Paste a job description and Shortlist runs it through a pipeline of specialized 
                     │  (TLS + Proxy)   │
                     └────┬────────┬────┘
                          │        │
-              ┌──────────▼──┐  ┌──▼──────────┐
+              ┌──────────▼──┐  ┌──▼───────────┐
               │   Backend   │  │   Frontend   │
               │  (Gunicorn  │  │  (Next.js    │
               │   +Uvicorn) │  │   Standalone)│
