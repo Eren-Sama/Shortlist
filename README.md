@@ -3,77 +3,111 @@
 # ⚡ Shortlist  
 ### Engineer Your Career Signal
 
-An AI multi-agent system that reverse-engineers job descriptions and generates recruiter-aligned projects, repositories, and portfolio assets.
+An AI-powered multi-agent system that reverse-engineers job descriptions and generates recruiter-aligned projects, repositories, and portfolio assets.
+
+<br/>
+
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![LangGraph](https://img.shields.io/badge/LangGraph-Multi--Agent-blueviolet?style=for-the-badge)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
 </div>
 
 ---
 
-## 🧠 Concept
+## 🧠 Overview
 
-Recruiters evaluate signal alignment — not randomness.
+Recruiters evaluate alignment — not randomness.
 
-Shortlist transforms a job description into a structured skill graph, then engineers projects, repositories, and resume materials optimized for that exact role.
+Shortlist converts a job description into a structured skill graph, then engineers projects, repositories, and resume materials optimized for that exact role.
 
-This system is built as a modular, production-grade multi-agent architecture.
-
----
-
-# 🧩 Intelligence Architecture
-
-Shortlist operates as a coordinated graph of independent intelligence nodes:
-
-- JD Analysis  
-- Company Logic Engine  
-- Capstone Generator  
-- Repository Analyzer  
-- Scaffold Generator  
-- Portfolio Optimizer  
-- Resume Fitness Scorer  
-
-Each node operates independently and is orchestrated dynamically depending on user intent.
+Built as a modular, production-grade multi-agent architecture.
 
 ---
 
-# 🏗 System Architecture
+# 🧩 Intelligence System
+
+Shortlist operates as a coordinated graph of specialized agents:
+
+### 🔍 JD Analysis  
+Extracts required skills, seniority expectations, domain context, and implicit behavioral signals.
+
+### 🏢 Company Logic Engine  
+Applies contextual modifiers based on company archetype:
+- Startup → velocity, ownership
+- Enterprise → scale, reliability
+- Consultancy → clarity, adaptability
+
+### 🏗 Capstone Generator  
+Produces strategically aligned project ideas with recruiter-match scoring.
+
+### 📊 Repository Analyzer  
+Evaluates GitHub repositories for:
+- Structural quality  
+- Documentation clarity  
+- Signal strength  
+- Alignment vs target role  
+
+### 🧱 Scaffold Generator  
+Generates structured production-grade repository blueprints.
+
+### 📈 Portfolio Optimizer  
+Creates:
+- Optimized README copy  
+- Resume bullets  
+- Demo pitch script  
+- Social launch copy  
+
+### 📄 Resume Fitness Scorer  
+Analyzes resume alignment against JD graph and surfaces improvement gaps.
+
+---
+
+# 🏗 Architecture
 
 ```
                          ┌────────────────────┐
-                         │  Reverse Proxy     │
-                         │  TLS Termination   │
+                         │   Reverse Proxy    │
+                         │   TLS Termination  │
                          └─────────┬──────────┘
                                    │
             ┌──────────────────────┼──────────────────────┐
             │                      │                      │
       ┌─────▼─────┐          ┌─────▼─────┐         ┌─────▼─────┐
       │  Frontend │          │  Backend  │         │ External  │
-      │  Next.js  │          │ FastAPI   │         │ Services  │
+      │  Next.js  │          │  FastAPI  │         │ Services  │
       │  AppRouter│          │ LangGraph │         │           │
       └───────────┘          └─────┬─────┘         └─────┬─────┘
                                     │                     │
                               ┌─────▼─────┐         ┌─────▼─────┐
-                              │ Database  │         │   LLM     │
-                              │ + Auth    │         │ Provider  │
+                              │ PostgreSQL│         │    LLM    │
+                              │  + Auth   │         │  Provider │
                               └───────────┘         └───────────┘
 ```
 
 ---
 
-# ⚙️ Technical Stack
+# ⚙️ Tech Stack
 
-| Layer | Stack |
-|--------|--------|
-| Frontend | Next.js (App Router), React, TypeScript |
-| Backend | FastAPI, Python 3.12 |
+| Layer | Technology |
+|--------|------------|
+| Frontend | Next.js (App Router), React, TypeScript, Tailwind |
+| Backend | FastAPI, Python 3.12, Pydantic v2 |
 | AI Orchestration | LangGraph |
 | LLM | Groq (Llama 3.x series) |
 | Database | PostgreSQL with Row-Level Security |
-| Infrastructure | Dockerized multi-stage builds |
+| Infrastructure | Docker multi-stage builds |
+| CI/CD | GitHub Actions |
 | Testing | Comprehensive automated test suite |
 
 ---
 
-# 📂 Structural Overview
+# 📂 Structural Design
 
 ```
 Shortlist/
@@ -94,7 +128,7 @@ Shortlist/
 │   ├── lib/
 │   └── middleware.ts
 │
-├── CI/CD workflows
+├── CI workflows
 ├── Docker configuration
 └── Deployment documentation
 ```
@@ -103,40 +137,37 @@ Shortlist/
 
 # 🔥 Engineering Highlights
 
-- Graph-based multi-agent orchestration
-- Provider-agnostic LLM abstraction
-- Strict schema validation (Pydantic v2)
-- Row-Level Security enforced at the database layer
-- Structured JSON logging
-- Production-grade monitoring hooks
-- Containerized deployment pipeline
-- Extensive automated testing coverage
+- Graph-based multi-agent orchestration  
+- Provider-agnostic LLM abstraction layer  
+- Strict schema validation  
+- Database-level security enforcement  
+- Structured logging architecture  
+- Production-grade containerization  
+- Clean separation of concerns  
 
 ---
 
-# 🎯 Design Principles
+# 🎯 Design Philosophy
 
 - Signal-first engineering  
 - Modular intelligence layers  
-- Production-readiness by default  
-- Clear separation of concerns  
-- Recruiter-readable architecture  
+- Production-ready architecture  
+- Recruiter-readable system design  
+- Scalable orchestration patterns  
 
 ---
 
-# 🔐 Repository Notice
+# 🔎 Repository Note
 
-This repository is shared publicly for portfolio demonstration and architectural review purposes only.
+This repository is shared publicly for architectural demonstration and portfolio review purposes.
 
-Execution details, configuration layers, environment specifications, and deployment instructions are intentionally omitted.
+Operational configuration details and deployment layers are intentionally not included.
 
 ---
 
 # 📜 License
 
-© 2026. All Rights Reserved.
-
-Unauthorized copying, modification, distribution, or commercial use of this codebase is prohibited without explicit written permission from the author.
+MIT
 
 ---
 
