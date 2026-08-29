@@ -133,7 +133,7 @@ async def optimize_portfolio(
             generation_metadata={
                 "portfolio_id": portfolio_id,
                 "processing_time_ms": elapsed_ms,
-                "model": "openai/gpt-oss-120b",
+                "model": "llama-3.1-8b-instant",
             },
         )
 
