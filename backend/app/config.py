@@ -48,8 +48,8 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: Optional[str] = None
 
     # Model selection
-    LLM_ANALYSIS_MODEL: str = "openai/gpt-oss-120b"
-    LLM_CODE_MODEL: str = "openai/gpt-oss-120b"
+    LLM_ANALYSIS_MODEL: str = "llama-3.1-8b-instant"
+    LLM_CODE_MODEL: str = "llama-3.1-8b-instant"
     LLM_TEMPERATURE: float = Field(default=0.15, ge=0.0, le=2.0)
     LLM_MAX_TOKENS: int = Field(default=8192, ge=256, le=32768)
 
