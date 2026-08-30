@@ -46,7 +46,6 @@ class Settings(BaseSettings):
     # LLM Providers
     GEMINI_API_KEY: Optional[str] = None
     NVIDIA_API_KEY: Optional[str] = None
-    MINIMAX_API_KEY: Optional[str] = None
 
     # Model selection
     LLM_ANALYSIS_MODEL: str = "gemini-3.7-flash"

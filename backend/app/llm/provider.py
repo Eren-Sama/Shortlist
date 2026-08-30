@@ -11,7 +11,6 @@ from enum import Enum
 
 from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_nvidia_ai_endpoints import ChatNVIDIA
-from langchain_openai import ChatOpenAI  # Used for MiniMax OpenAI-compat API
 from langchain_google_genai import ChatGoogleGenerativeAI
 
 from app.config import get_settings
@@ -23,7 +22,6 @@ logger = get_logger("llm.provider")
 class LLMProvider(str, Enum):
     GEMINI = "gemini"
     NVIDIA = "nvidia"
-    MINIMAX = "minimax"
 
 
 class LLMTask(str, Enum):
@@ -50,7 +48,6 @@ def get_llm(
     1. Explicit provider override
     2. Gemini (primary — 2M context)
     3. NVIDIA Nemotron Ultra (fallback — 1M context, free)
-    4. MiniMax M3 (fallback — 1M context, free)
 
     Security:
     - API keys are sourced from environment variables only
@@ -81,13 +78,10 @@ def get_llm(
     if settings.NVIDIA_API_KEY:
         available.append((LLMProvider.NVIDIA, _create_nvidia_llm(model_name, _temperature, _max_tokens, settings)))
 
-    if settings.MINIMAX_API_KEY:
-        available.append((LLMProvider.MINIMAX, _create_minimax_llm(model_name, _temperature, _max_tokens, settings)))
-
     if not available:
         raise RuntimeError(
             "No LLM API key configured. "
-            "Set GEMINI_API_KEY, NVIDIA_API_KEY, or MINIMAX_API_KEY in .env"
+            "Set GEMINI_API_KEY or NVIDIA_API_KEY in .env"
         )
 
     # Reorder based on explicit provider request
@@ -137,23 +131,6 @@ def _create_nvidia_llm(
     )
 
 
-def _create_minimax_llm(
-    model: str, temperature: float, max_tokens: int, settings
-) -> BaseChatModel:
-    """Create a MiniMax M3-backed LLM instance (1M context, free tier)."""
-    if not settings.MINIMAX_API_KEY:
-        raise RuntimeError("MINIMAX_API_KEY not set")
-
-    # MiniMax is OpenAI-compatible — just point base_url at their endpoint
-    return ChatOpenAI(
-        model="MiniMax-M3",
-        temperature=temperature,
-        max_tokens=max_tokens,
-        api_key=settings.MINIMAX_API_KEY,
-        base_url="https://api.minimax.io/v1",
-        max_retries=3,
-        timeout=60,
-    )
 
 
 def _create_gemini_llm(
