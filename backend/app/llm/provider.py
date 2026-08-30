@@ -10,8 +10,7 @@ from typing import Optional
 from enum import Enum
 
 from langchain_core.language_models.chat_models import BaseChatModel
-from langchain_groq import ChatGroq
-from langchain_openai import ChatOpenAI
+from langchain_cohere import ChatCohere
 from langchain_google_genai import ChatGoogleGenerativeAI
 
 from app.config import get_settings
@@ -21,8 +20,7 @@ logger = get_logger("llm.provider")
 
 
 class LLMProvider(str, Enum):
-    GROQ = "groq"
-    OPENAI = "openai"
+    COHERE = "cohere"
     GEMINI = "gemini"
 
 
@@ -48,8 +46,8 @@ def get_llm(
 
     Priority:
     1. Explicit provider override
-    2. Groq (primary — free, fast)
-    3. OpenAI (fallback — if Groq key is missing)
+    2. Gemini (primary)
+    3. Cohere (fallback for massive context)
 
     Security:
     - API keys are sourced from environment variables only
@@ -65,11 +63,7 @@ def get_llm(
     # Initialize available models
     available = []
     
-    # Priority: Groq -> OpenAI -> Gemini
-    if settings.GROQ_API_KEY:
-        available.append((LLMProvider.GROQ, _create_groq_llm(model_name, _temperature, _max_tokens, settings)))
-    if settings.OPENAI_API_KEY:
-        available.append((LLMProvider.OPENAI, _create_openai_llm(model_name, _temperature, _max_tokens, settings)))
+    # Priority: Gemini -> Cohere
     if settings.GEMINI_API_KEY:
         # Try the primary Gemini model
         gemini_primary = _create_gemini_llm(model_name, _temperature, _max_tokens, settings)
@@ -85,10 +79,13 @@ def get_llm(
         gemini_with_fallbacks = gemini_primary.with_fallbacks(gemini_fallbacks)
         available.append((LLMProvider.GEMINI, gemini_with_fallbacks))
 
+    if settings.COHERE_API_KEY:
+        available.append((LLMProvider.COHERE, _create_cohere_llm(model_name, _temperature, _max_tokens, settings)))
+
     if not available:
         raise RuntimeError(
             "No LLM API key configured. "
-            "Set GROQ_API_KEY, OPENAI_API_KEY, or GEMINI_API_KEY in .env"
+            "Set GEMINI_API_KEY or COHERE_API_KEY in .env"
         )
 
     # Reorder based on explicit provider request
@@ -122,42 +119,21 @@ def _select_model(task: LLMTask, settings) -> str:
     return model_map.get(task, settings.LLM_ANALYSIS_MODEL)
 
 
-def _create_groq_llm(
-    model: str, temperature: float, max_tokens: int, settings
-) -> ChatGroq:
-    """Create a Groq-backed LLM instance."""
-    if not settings.GROQ_API_KEY:
-        raise RuntimeError("GROQ_API_KEY not set")
-        
-    # Map foreign models to sensible Groq defaults
-    if "gemini" in model.lower() or "gpt" in model.lower():
-        model = "llama-3.1-70b-versatile"
-
-    return ChatGroq(
-        model=model,
-        temperature=temperature,
-        max_tokens=max_tokens,
-        api_key=settings.GROQ_API_KEY,
-        max_retries=3,
-        timeout=60,
-    )
-
-
-def _create_openai_llm(
+def _create_cohere_llm(
     model: str, temperature: float, max_tokens: int, settings
 ) -> BaseChatModel:
-    """Create an OpenAI-backed LLM instance."""
-    if not settings.OPENAI_API_KEY:
-        raise RuntimeError("OPENAI_API_KEY not set")
+    """Create a Cohere-backed LLM instance."""
+    if not settings.COHERE_API_KEY:
+        raise RuntimeError("COHERE_API_KEY not set")
         
-    if "gpt" not in model.lower():
-        model = "gpt-4o-mini"
+    # Map foreign models to Cohere defaults (Command-R supports 128k context)
+    if "gemini" in model.lower():
+        model = "command-r"
 
-    return ChatOpenAI(
+    return ChatCohere(
         model=model,
         temperature=temperature,
-        max_tokens=max_tokens,
-        api_key=settings.OPENAI_API_KEY,
+        cohere_api_key=settings.COHERE_API_KEY,
         max_retries=3,
         timeout=60,
     )

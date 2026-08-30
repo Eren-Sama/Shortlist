@@ -44,8 +44,7 @@ class Settings(BaseSettings):
     SUPABASE_JWT_SECRET: str = ""
 
     # LLM Providers
-    GROQ_API_KEY: str = ""
-    OPENAI_API_KEY: Optional[str] = None
+    COHERE_API_KEY: Optional[str] = None
     GEMINI_API_KEY: Optional[str] = None
 
     # Model selection
