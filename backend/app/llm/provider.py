@@ -68,8 +68,8 @@ def get_llm(
         # Create a robust fallback chain of the best free OpenRouter models
         or_primary = _create_openrouter_llm(settings.OPENROUTER_MODEL, _temperature, _max_tokens, settings)
         or_fallbacks = [
+            _create_openrouter_llm("google/gemma-4-31b-it:free", _temperature, _max_tokens, settings),
             _create_openrouter_llm("nvidia/nemotron-3-super-120b-a12b:free", _temperature, _max_tokens, settings),
-            _create_openrouter_llm("google/gemma-4-26b-a4b-it:free", _temperature, _max_tokens, settings),
             _create_openrouter_llm("z-ai/glm-5.2:free", _temperature, _max_tokens, settings),
             _create_openrouter_llm("openrouter/free", _temperature, _max_tokens, settings)
         ]

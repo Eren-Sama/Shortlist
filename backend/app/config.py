@@ -47,8 +47,8 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: Optional[str] = None
     OPENROUTER_API_KEY: Optional[str] = None
     # Change OPENROUTER_MODEL via HuggingFace secret when needed — no code push!
-    # Free models: google/gemma-4-31b-it:free, nvidia/nemotron-3-super-120b-a12b:free
-    OPENROUTER_MODEL: str = "google/gemma-4-31b-it:free"
+    # Free models: nvidia/nemotron-3-super-120b-a12b:free (fastest, 12B active), google/gemma-4-31b-it:free
+    OPENROUTER_MODEL: str = "nvidia/nemotron-3-super-120b-a12b:free"
 
     # Model selection
     LLM_ANALYSIS_MODEL: str = "gemini-3.7-flash"
