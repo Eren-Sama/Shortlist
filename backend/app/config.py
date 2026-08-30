@@ -35,7 +35,7 @@ class Settings(BaseSettings):
     @property
     def allowed_origins_list(self) -> list[str]:
         """Parse comma-separated origins into a list."""
-        return [o.strip() for o in self.ALLOWED_ORIGINS.split(",") if o.strip()]
+        return [o.strip() for o in str(self.ALLOWED_ORIGINS).split(",") if o.strip()]
 
     # Supabase
     SUPABASE_URL: str = ""
