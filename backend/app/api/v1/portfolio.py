@@ -20,6 +20,7 @@ from app.services.db_service import (
     get_portfolio_output,
     list_portfolio_outputs,
 )
+from app.config import get_settings
 from app.logging_config import get_logger
 
 router = APIRouter()
@@ -124,7 +125,7 @@ async def optimize_portfolio(
         )
 
         logger.info(f"Portfolio {portfolio_id} completed in {elapsed_ms}ms")
-
+        
         return PortfolioOptimizeResponse(
             readme_markdown=output.get("readme_markdown", ""),
             resume_bullets=output.get("resume_bullets", []),
@@ -133,7 +134,7 @@ async def optimize_portfolio(
             generation_metadata={
                 "portfolio_id": portfolio_id,
                 "processing_time_ms": elapsed_ms,
-                "model": "llama-3.1-8b-instant",
+                "model": get_settings().LLM_ANALYSIS_MODEL,
             },
         )
 

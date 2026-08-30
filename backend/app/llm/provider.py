@@ -11,6 +11,8 @@ from enum import Enum
 
 from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_groq import ChatGroq
+from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 from app.config import get_settings
 from app.logging_config import get_logger
@@ -21,6 +23,7 @@ logger = get_logger("llm.provider")
 class LLMProvider(str, Enum):
     GROQ = "groq"
     OPENAI = "openai"
+    GEMINI = "gemini"
 
 
 class LLMTask(str, Enum):
@@ -65,10 +68,12 @@ def get_llm(
             provider = LLMProvider.GROQ
         elif settings.OPENAI_API_KEY:
             provider = LLMProvider.OPENAI
+        elif settings.GEMINI_API_KEY:
+            provider = LLMProvider.GEMINI
         else:
             raise RuntimeError(
                 "No LLM API key configured. "
-                "Set GROQ_API_KEY or OPENAI_API_KEY in .env"
+                "Set GROQ_API_KEY, OPENAI_API_KEY, or GEMINI_API_KEY in .env"
             )
 
     logger.info(
@@ -81,6 +86,8 @@ def get_llm(
         return _create_groq_llm(model_name, _temperature, _max_tokens, settings)
     elif provider == LLMProvider.OPENAI:
         return _create_openai_llm(model_name, _temperature, _max_tokens, settings)
+    elif provider == LLMProvider.GEMINI:
+        return _create_gemini_llm(model_name, _temperature, _max_tokens, settings)
     else:
         raise ValueError(f"Unsupported LLM provider: {provider}")
 
@@ -120,20 +127,28 @@ def _create_openai_llm(
     if not settings.OPENAI_API_KEY:
         raise RuntimeError("OPENAI_API_KEY not set")
 
-    # Lazy import — only needed if OpenAI is used
-    try:
-        from langchain_openai import ChatOpenAI
-    except ImportError:
-        raise RuntimeError(
-            "langchain-openai is not installed. "
-            "Run: pip install langchain-openai"
-        )
-
     return ChatOpenAI(
         model=model if "gpt" in model.lower() else "gpt-4o",
         temperature=temperature,
         max_tokens=max_tokens,
         api_key=settings.OPENAI_API_KEY,
+        max_retries=3,
+        timeout=60,
+    )
+
+
+def _create_gemini_llm(
+    model: str, temperature: float, max_tokens: int, settings
+) -> BaseChatModel:
+    """Create a Google Gemini-backed LLM instance."""
+    if not settings.GEMINI_API_KEY:
+        raise RuntimeError("GEMINI_API_KEY not set")
+
+    return ChatGoogleGenerativeAI(
+        model=model,
+        temperature=temperature,
+        max_output_tokens=max_tokens,
+        google_api_key=settings.GEMINI_API_KEY,
         max_retries=3,
         timeout=60,
     )

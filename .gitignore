@@ -60,3 +60,6 @@ ehthumbs.db
 *.bak
 *.tmp
 *.temp
+
+# ── Documentation ───────────────────────────────────────
+shortlist explanation/
