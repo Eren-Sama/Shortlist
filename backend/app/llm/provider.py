@@ -121,9 +121,9 @@ def _create_openrouter_llm(
     """Create an OpenRouter-backed LLM instance.
     
     OpenRouter is OpenAI-compatible and provides free access to:
-    - deepseek/deepseek-r1:free (128k context, excellent reasoning)
-    - google/gemini-2.0-flash-exp:free (1M context)
-    - meta-llama/llama-3.3-70b-instruct:free (128k context)
+    - meta-llama/llama-3.3-70b-instruct:free (128k context, excellent generalist logic)
+    - google/gemini-2.0-flash-exp:free (1M context, incredible multi-tasking)
+    - thinkingmachines/inkling:free (1M context)
     
     Get a free API key at https://openrouter.ai
     """
