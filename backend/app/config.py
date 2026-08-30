@@ -47,8 +47,8 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: Optional[str] = None
     OPENROUTER_API_KEY: Optional[str] = None
     # Change OPENROUTER_MODEL via HuggingFace secret when needed — no code push!
-    # Free models: meta-llama/llama-3.3-70b-instruct:free (128k context, excellent generalist), google/gemini-2.0-flash-exp:free (1M context)
-    OPENROUTER_MODEL: str = "meta-llama/llama-3.3-70b-instruct:free"
+    # Free models: google/gemma-4-31b-it:free, nvidia/nemotron-3-super-120b-a12b:free
+    OPENROUTER_MODEL: str = "google/gemma-4-31b-it:free"
 
     # Model selection
     LLM_ANALYSIS_MODEL: str = "gemini-3.7-flash"
