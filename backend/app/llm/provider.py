@@ -68,9 +68,10 @@ def get_llm(
         # Create a robust fallback chain of the best free OpenRouter models
         or_primary = _create_openrouter_llm(settings.OPENROUTER_MODEL, _temperature, _max_tokens, settings)
         or_fallbacks = [
-            _create_openrouter_llm("qwen/qwen3.6-plus:free", _temperature, _max_tokens, settings),
-            _create_openrouter_llm("meta-llama/llama-3.3-70b-instruct:free", _temperature, _max_tokens, settings),
-            _create_openrouter_llm("nvidia/nemotron-3-super-120b-a12b:free", _temperature, _max_tokens, settings)
+            _create_openrouter_llm("nvidia/nemotron-3-super-120b-a12b:free", _temperature, _max_tokens, settings),
+            _create_openrouter_llm("google/gemma-4-26b-a4b-it:free", _temperature, _max_tokens, settings),
+            _create_openrouter_llm("z-ai/glm-5.2:free", _temperature, _max_tokens, settings),
+            _create_openrouter_llm("openrouter/free", _temperature, _max_tokens, settings)
         ]
         or_with_fallbacks = or_primary.with_fallbacks(or_fallbacks)
         available.append((LLMProvider.OPENROUTER, or_with_fallbacks))
