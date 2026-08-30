@@ -117,11 +117,16 @@ async def repo_analysis_node(state: AgentState) -> dict:
         prompt_args = _result_to_prompt_args(result)
         
         # Truncate sample code to prevent token overflow
+        # Cap to 20 files max and 4000 chars/file → ~80k tokens max (safe for all providers)
         if "sample_code" in prompt_args and isinstance(prompt_args["sample_code"], dict):
             truncated = {}
-            for fpath, content in prompt_args["sample_code"].items():
-                truncated[fpath] = content[:8000] if isinstance(content, str) else content
+            for i, (fpath, content) in enumerate(prompt_args["sample_code"].items()):
+                if i >= 20:  # Max 20 files to stay within 128k context limit
+                    break
+                truncated[fpath] = content[:4000] if isinstance(content, str) else content
             prompt_args["sample_code"] = truncated
+            if len(prompt_args["sample_code"]) < len(prompt_args.get("sample_code", {})):
+                logger.info(f"Truncated sample code to {len(truncated)} files to fit context window")
         
         user_prompt = build_repo_user_prompt(**prompt_args)
         
