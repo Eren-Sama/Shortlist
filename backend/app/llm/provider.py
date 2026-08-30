@@ -65,7 +65,15 @@ def get_llm(
     
     # Priority: OpenRouter -> Gemini
     if settings.OPENROUTER_API_KEY:
-        available.append((LLMProvider.OPENROUTER, _create_openrouter_llm(model_name, _temperature, _max_tokens, settings)))
+        # Create a robust fallback chain of the best free OpenRouter models
+        or_primary = _create_openrouter_llm(settings.OPENROUTER_MODEL, _temperature, _max_tokens, settings)
+        or_fallbacks = [
+            _create_openrouter_llm("qwen/qwen3.6-plus:free", _temperature, _max_tokens, settings),
+            _create_openrouter_llm("meta-llama/llama-3.3-70b-instruct:free", _temperature, _max_tokens, settings),
+            _create_openrouter_llm("nvidia/nemotron-3-super-120b-a12b:free", _temperature, _max_tokens, settings)
+        ]
+        or_with_fallbacks = or_primary.with_fallbacks(or_fallbacks)
+        available.append((LLMProvider.OPENROUTER, or_with_fallbacks))
 
     if settings.GEMINI_API_KEY:
         # Gemini with same-provider fallbacks (all share daily quota, so chain exhausts together)
@@ -131,7 +139,7 @@ def _create_openrouter_llm(
         raise RuntimeError("OPENROUTER_API_KEY not set")
 
     return ChatOpenAI(
-        model=settings.OPENROUTER_MODEL,
+        model=model,
         temperature=temperature,
         max_tokens=max_tokens,
         api_key=settings.OPENROUTER_API_KEY,
