@@ -44,8 +44,9 @@ class Settings(BaseSettings):
     SUPABASE_JWT_SECRET: str = ""
 
     # LLM Providers
-    COHERE_API_KEY: Optional[str] = None
     GEMINI_API_KEY: Optional[str] = None
+    NVIDIA_API_KEY: Optional[str] = None
+    MINIMAX_API_KEY: Optional[str] = None
 
     # Model selection
     LLM_ANALYSIS_MODEL: str = "gemini-3.7-flash"
