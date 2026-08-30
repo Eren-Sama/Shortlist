@@ -116,10 +116,6 @@ export default function HomePage() {
     return () => window.removeEventListener("scroll", fn);
   }, []);
 
-  useEffect(() => {
-    if (user) setShowAuth(false);
-  }, [user]);
-
   if (loading)
     return (
       <div className="flex min-h-screen items-center justify-center bg-root">
@@ -200,7 +196,7 @@ export default function HomePage() {
       </motion.header>
 
       <AnimatePresence>
-        {showAuth && (
+        {showAuth && !user && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

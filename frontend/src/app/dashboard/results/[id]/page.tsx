@@ -134,7 +134,7 @@ export default function ResultsPage() {
 
   function tryExtractJSON(text: unknown): Record<string, unknown> | null {
     if (typeof text !== "string" || text.length < 10) return null;
-    let clean = text.trim()
+    const clean = text.trim()
       .replace(/^```[a-zA-Z]*\s*/, "")
       .replace(/```\s*$/, "")
       .trim();
