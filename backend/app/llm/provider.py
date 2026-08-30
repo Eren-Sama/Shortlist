@@ -59,37 +59,56 @@ def get_llm(
     _temperature = temperature if temperature is not None else settings.LLM_TEMPERATURE
     _max_tokens = max_tokens if max_tokens is not None else settings.LLM_MAX_TOKENS
 
-    # Select model based on task
+    # Select base model based on task
     model_name = _select_model(task, settings)
 
-    # Determine provider
-    if provider is None:
-        if settings.GROQ_API_KEY:
-            provider = LLMProvider.GROQ
-        elif settings.OPENAI_API_KEY:
-            provider = LLMProvider.OPENAI
-        elif settings.GEMINI_API_KEY:
-            provider = LLMProvider.GEMINI
-        else:
-            raise RuntimeError(
-                "No LLM API key configured. "
-                "Set GROQ_API_KEY, OPENAI_API_KEY, or GEMINI_API_KEY in .env"
-            )
+    # Initialize available models
+    available = []
+    
+    # Priority: Groq -> OpenAI -> Gemini
+    if settings.GROQ_API_KEY:
+        available.append((LLMProvider.GROQ, _create_groq_llm(model_name, _temperature, _max_tokens, settings)))
+    if settings.OPENAI_API_KEY:
+        available.append((LLMProvider.OPENAI, _create_openai_llm(model_name, _temperature, _max_tokens, settings)))
+    if settings.GEMINI_API_KEY:
+        # Try the primary Gemini model
+        gemini_primary = _create_gemini_llm(model_name, _temperature, _max_tokens, settings)
+        
+        # Add other massive-context Gemini models as fallbacks to avoid 503s
+        gemini_fallbacks = [
+            _create_gemini_llm("gemini-1.5-pro", _temperature, _max_tokens, settings),
+            _create_gemini_llm("gemini-1.5-flash", _temperature, _max_tokens, settings),
+            _create_gemini_llm("gemini-2.0-flash-exp", _temperature, _max_tokens, settings)
+        ]
+        
+        # Chain the Gemini fallbacks together
+        gemini_with_fallbacks = gemini_primary.with_fallbacks(gemini_fallbacks)
+        available.append((LLMProvider.GEMINI, gemini_with_fallbacks))
+
+    if not available:
+        raise RuntimeError(
+            "No LLM API key configured. "
+            "Set GROQ_API_KEY, OPENAI_API_KEY, or GEMINI_API_KEY in .env"
+        )
+
+    # Reorder based on explicit provider request
+    if provider:
+        for i, (p, llm) in enumerate(available):
+            if p == provider:
+                available.insert(0, available.pop(i))
+                break
+
+    primary_provider, primary_llm = available[0]
+    fallbacks = [llm for p, llm in available[1:]]
 
     logger.info(
-        f"Creating LLM: provider={provider.value}, "
-        f"model={model_name}, task={task.value}, "
-        f"temperature={_temperature}"
+        f"Creating LLM: task={task.value}, primary={primary_provider.value}, "
+        f"fallbacks={len(fallbacks)}, temperature={_temperature}"
     )
 
-    if provider == LLMProvider.GROQ:
-        return _create_groq_llm(model_name, _temperature, _max_tokens, settings)
-    elif provider == LLMProvider.OPENAI:
-        return _create_openai_llm(model_name, _temperature, _max_tokens, settings)
-    elif provider == LLMProvider.GEMINI:
-        return _create_gemini_llm(model_name, _temperature, _max_tokens, settings)
-    else:
-        raise ValueError(f"Unsupported LLM provider: {provider}")
+    if fallbacks:
+        return primary_llm.with_fallbacks(fallbacks)
+    return primary_llm
 
 
 def _select_model(task: LLMTask, settings) -> str:
@@ -109,6 +128,10 @@ def _create_groq_llm(
     """Create a Groq-backed LLM instance."""
     if not settings.GROQ_API_KEY:
         raise RuntimeError("GROQ_API_KEY not set")
+        
+    # Map foreign models to sensible Groq defaults
+    if "gemini" in model.lower() or "gpt" in model.lower():
+        model = "llama-3.1-70b-versatile"
 
     return ChatGroq(
         model=model,
@@ -126,9 +149,12 @@ def _create_openai_llm(
     """Create an OpenAI-backed LLM instance."""
     if not settings.OPENAI_API_KEY:
         raise RuntimeError("OPENAI_API_KEY not set")
+        
+    if "gpt" not in model.lower():
+        model = "gpt-4o-mini"
 
     return ChatOpenAI(
-        model=model if "gpt" in model.lower() else "gpt-4o",
+        model=model,
         temperature=temperature,
         max_tokens=max_tokens,
         api_key=settings.OPENAI_API_KEY,
@@ -143,6 +169,9 @@ def _create_gemini_llm(
     """Create a Google Gemini-backed LLM instance."""
     if not settings.GEMINI_API_KEY:
         raise RuntimeError("GEMINI_API_KEY not set")
+        
+    if "gemini" not in model.lower():
+        model = "gemini-1.5-flash"
 
     return ChatGoogleGenerativeAI(
         model=model,
