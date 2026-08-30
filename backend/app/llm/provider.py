@@ -10,7 +10,7 @@ from typing import Optional
 from enum import Enum
 
 from langchain_core.language_models.chat_models import BaseChatModel
-from langchain_nvidia_ai_endpoints import ChatNVIDIA
+from langchain_openai import ChatOpenAI
 from langchain_google_genai import ChatGoogleGenerativeAI
 
 from app.config import get_settings
@@ -20,8 +20,8 @@ logger = get_logger("llm.provider")
 
 
 class LLMProvider(str, Enum):
+    OPENROUTER = "openrouter"
     GEMINI = "gemini"
-    NVIDIA = "nvidia"
 
 
 class LLMTask(str, Enum):
@@ -46,8 +46,8 @@ def get_llm(
 
     Priority:
     1. Explicit provider override
-    2. Gemini (primary — 2M context)
-    3. NVIDIA Nemotron Ultra (fallback — 1M context, free)
+    2. OpenRouter (primary — free models, stable, large context)
+    3. Gemini (fallback — 2M context)
 
     Security:
     - API keys are sourced from environment variables only
@@ -63,9 +63,9 @@ def get_llm(
     # Initialize available models
     available = []
     
-    # Priority: NVIDIA Nemotron -> Gemini (Gemini has 20 req/day free tier limit)
-    if settings.NVIDIA_API_KEY:
-        available.append((LLMProvider.NVIDIA, _create_nvidia_llm(model_name, _temperature, _max_tokens, settings)))
+    # Priority: OpenRouter -> Gemini
+    if settings.OPENROUTER_API_KEY:
+        available.append((LLMProvider.OPENROUTER, _create_openrouter_llm(model_name, _temperature, _max_tokens, settings)))
 
     if settings.GEMINI_API_KEY:
         # Gemini with same-provider fallbacks (all share daily quota, so chain exhausts together)
@@ -81,7 +81,7 @@ def get_llm(
     if not available:
         raise RuntimeError(
             "No LLM API key configured. "
-            "Set GEMINI_API_KEY or NVIDIA_API_KEY in .env"
+            "Set OPENROUTER_API_KEY or GEMINI_API_KEY in .env"
         )
 
     # Reorder based on explicit provider request
@@ -115,18 +115,33 @@ def _select_model(task: LLMTask, settings) -> str:
     return model_map.get(task, settings.LLM_ANALYSIS_MODEL)
 
 
-def _create_nvidia_llm(
+def _create_openrouter_llm(
     model: str, temperature: float, max_tokens: int, settings
 ) -> BaseChatModel:
-    """Create an NVIDIA Nemotron-backed LLM instance (1M context, free tier)."""
-    if not settings.NVIDIA_API_KEY:
-        raise RuntimeError("NVIDIA_API_KEY not set")
+    """Create an OpenRouter-backed LLM instance.
+    
+    OpenRouter is OpenAI-compatible and provides free access to:
+    - deepseek/deepseek-r1:free (128k context, excellent reasoning)
+    - google/gemini-2.0-flash-exp:free (1M context)
+    - meta-llama/llama-3.3-70b-instruct:free (128k context)
+    
+    Get a free API key at https://openrouter.ai
+    """
+    if not settings.OPENROUTER_API_KEY:
+        raise RuntimeError("OPENROUTER_API_KEY not set")
 
-    return ChatNVIDIA(
-        model="meta/llama-3.1-70b-instruct",
+    return ChatOpenAI(
+        model=settings.OPENROUTER_MODEL,
         temperature=temperature,
         max_tokens=max_tokens,
-        api_key=settings.NVIDIA_API_KEY,
+        api_key=settings.OPENROUTER_API_KEY,
+        base_url="https://openrouter.ai/api/v1",
+        max_retries=3,
+        timeout=120,
+        default_headers={
+            "HTTP-Referer": "https://shortlist-seven.vercel.app",
+            "X-Title": "Shortlist",
+        },
     )
 
 

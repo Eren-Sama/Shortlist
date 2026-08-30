@@ -45,7 +45,10 @@ class Settings(BaseSettings):
 
     # LLM Providers
     GEMINI_API_KEY: Optional[str] = None
-    NVIDIA_API_KEY: Optional[str] = None
+    OPENROUTER_API_KEY: Optional[str] = None
+    # Change OPENROUTER_MODEL via HuggingFace secret when needed — no code push!
+    # Free models: deepseek/deepseek-r1:free, google/gemini-2.0-flash-exp:free
+    OPENROUTER_MODEL: str = "deepseek/deepseek-r1:free"
 
     # Model selection
     LLM_ANALYSIS_MODEL: str = "gemini-3.7-flash"

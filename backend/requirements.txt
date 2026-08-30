@@ -13,7 +13,7 @@ pydantic-settings>=2.7.0,<3.0.0
 # ── LLM / Agent Orchestration ──
 langgraph>=0.2.0
 langchain-core>=0.3.0
-langchain-nvidia-ai-endpoints>=0.3.0
+langchain-openai>=0.2.0
 langchain-google-genai>=2.0.0
 
 # ── Database ──
