@@ -1,13 +1,3 @@
----
-title: Shortlist
-emoji: 🎯
-colorFrom: blue
-colorTo: purple
-sdk: docker
-app_port: 7860
-pinned: false
----
-
 <div align="center">
 
 # ⚡ Shortlist  
@@ -116,7 +106,7 @@ Analyzes resume alignment against JD graph and surfaces improvement gaps.
 | Frontend | Next.js (App Router), React, TypeScript, Tailwind |
 | Backend | FastAPI, Python 3.12, Pydantic v2 |
 | AI Orchestration | LangGraph |
-| LLM | Google Gemini (3.7 Flash) |
+| LLM | Groq (Llama 3.x series) |
 | Database | PostgreSQL with Row-Level Security |
 | Infrastructure | Docker multi-stage builds |
 | CI/CD | GitHub Actions |
