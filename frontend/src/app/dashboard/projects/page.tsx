@@ -13,12 +13,10 @@ export default function ProjectsPage() {
   const { session } = useAuth();
   const [analyses, setAnalyses] = useState<AnalysisListItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const isLoading = loading && !!session?.access_token;
 
   useEffect(() => {
-    if (!session?.access_token) {
-      setLoading(false);
-      return;
-    }
+    if (!session?.access_token) return;
     api.setToken(session.access_token);
     api
       .listAnalyses(50, 0)
@@ -29,7 +27,7 @@ export default function ProjectsPage() {
       .finally(() => setLoading(false));
   }, [session]);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex justify-center py-20">
         <div className="h-6 w-6 rounded-full border-2 border-accent border-t-transparent animate-spin" />
