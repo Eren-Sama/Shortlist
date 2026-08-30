@@ -10,7 +10,6 @@ env:
   PYTHON_VERSION: "3.12"
   NODE_VERSION: "20"
   REGISTRY: ghcr.io
-  IMAGE_PREFIX: ${{ github.repository_owner }}/shortlist
 
 jobs:
   # ── Backend Lint + Test ────────────────────────────────────
@@ -117,6 +116,9 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set Image Prefix (Lowercase)
+        run: echo "IMAGE_PREFIX=${GITHUB_REPOSITORY_OWNER,,}/shortlist" >> $GITHUB_ENV
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
