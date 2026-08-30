@@ -123,11 +123,10 @@ def _create_nvidia_llm(
         raise RuntimeError("NVIDIA_API_KEY not set")
 
     return ChatNVIDIA(
-        model="nvidia/nemotron-ultra-253b-v1",
+        model="nvidia/llama-3.1-nemotron-ultra-253b-v1",
         temperature=temperature,
         max_tokens=max_tokens,
         api_key=settings.NVIDIA_API_KEY,
-        max_retries=3,
     )
 
 
