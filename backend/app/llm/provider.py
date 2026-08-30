@@ -63,9 +63,12 @@ def get_llm(
     # Initialize available models
     available = []
     
-    # Priority: Gemini -> NVIDIA Nemotron -> MiniMax M3
+    # Priority: NVIDIA Nemotron -> Gemini (Gemini has 20 req/day free tier limit)
+    if settings.NVIDIA_API_KEY:
+        available.append((LLMProvider.NVIDIA, _create_nvidia_llm(model_name, _temperature, _max_tokens, settings)))
+
     if settings.GEMINI_API_KEY:
-        # Primary Gemini model with same-provider fallbacks
+        # Gemini with same-provider fallbacks (all share daily quota, so chain exhausts together)
         gemini_primary = _create_gemini_llm(model_name, _temperature, _max_tokens, settings)
         gemini_fallbacks = [
             _create_gemini_llm("gemini-1.5-pro", _temperature, _max_tokens, settings),
@@ -74,9 +77,6 @@ def get_llm(
         ]
         gemini_with_fallbacks = gemini_primary.with_fallbacks(gemini_fallbacks)
         available.append((LLMProvider.GEMINI, gemini_with_fallbacks))
-
-    if settings.NVIDIA_API_KEY:
-        available.append((LLMProvider.NVIDIA, _create_nvidia_llm(model_name, _temperature, _max_tokens, settings)))
 
     if not available:
         raise RuntimeError(
