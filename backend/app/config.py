@@ -47,8 +47,8 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: Optional[str] = None
     OPENROUTER_API_KEY: Optional[str] = None
     # Change OPENROUTER_MODEL via HuggingFace secret when needed — no code push!
-    # Free models: deepseek/deepseek-r1:free, google/gemini-2.0-flash-exp:free
-    OPENROUTER_MODEL: str = "deepseek/deepseek-r1:free"
+    # Free models: google/gemini-2.0-flash-exp:free (1M ctx), deepseek/deepseek-r1:free (128k)
+    OPENROUTER_MODEL: str = "google/gemini-2.0-flash-exp:free"
 
     # Model selection
     LLM_ANALYSIS_MODEL: str = "gemini-3.7-flash"
